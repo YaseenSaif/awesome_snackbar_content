@@ -1,8 +1,9 @@
+import 'dart:ui' as ui;
+
 import 'package:awesome_snackbar_content/src/assets_path.dart';
 import 'package:awesome_snackbar_content/src/content_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:ui' as ui;
 
 class AwesomeSnackbarContent extends StatelessWidget {
   /// `IMPORTANT NOTE` for SnackBar properties before putting this in `content`
@@ -37,6 +38,8 @@ class AwesomeSnackbarContent extends StatelessWidget {
   /// if you want to customize the font style of the message
   final TextStyle? messageTextStyle;
 
+  final double? height;
+
   const AwesomeSnackbarContent({
     Key? key,
     this.color,
@@ -45,6 +48,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
     required this.title,
     required this.message,
     required this.contentType,
+    this.height,
     this.inMaterialBanner = false,
   }) : super(key: key);
 
@@ -52,7 +56,9 @@ class AwesomeSnackbarContent extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
 
     // screen dimensions
     bool isMobile = size.width <= 768;
@@ -80,11 +86,12 @@ class AwesomeSnackbarContent extends StatelessWidget {
       margin: EdgeInsets.symmetric(
         horizontal: horizontalPadding,
       ),
-      height: size.height * 0.125,
+      height: height ?? size.height * 0.125,
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: [
+
           /// background container
           Container(
             width: size.width,
@@ -107,7 +114,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
                 height: size.height * 0.06,
                 width: size.width * 0.05,
                 colorFilter:
-                    _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
+                _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
                 package: 'awesome_snackbar_content',
               ),
             ),
@@ -118,13 +125,13 @@ class AwesomeSnackbarContent extends StatelessWidget {
             top: -size.height * 0.015,
             left: !isRTL
                 ? leftSpace -
-                    8 -
-                    (isMobile ? size.width * 0.075 : size.width * 0.035)
+                8 -
+                (isMobile ? size.width * 0.075 : size.width * 0.035)
                 : null,
             right: isRTL
                 ? rightSpace -
-                    8 -
-                    (isMobile ? size.width * 0.075 : size.width * 0.035)
+                8 -
+                (isMobile ? size.width * 0.075 : size.width * 0.035)
                 : null,
             child: Stack(
               alignment: Alignment.center,
@@ -133,7 +140,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
                   AssetsPath.back,
                   height: size.height * 0.06,
                   colorFilter:
-                      _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
+                  _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
                   package: 'awesome_snackbar_content',
                 ),
                 Positioned(
@@ -162,6 +169,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
                     /// `title` parameter
                     Expanded(
                       flex: 3,
@@ -225,26 +233,26 @@ class AwesomeSnackbarContent extends StatelessWidget {
     switch (contentType) {
       case ContentType.failure:
 
-        /// failure will show `CROSS`
+      /// failure will show `CROSS`
         return AssetsPath.failure;
       case ContentType.success:
 
-        /// success will show `CHECK`
+      /// success will show `CHECK`
         return AssetsPath.success;
       case ContentType.warning:
 
-        /// warning will show `EXCLAMATION`
+      /// warning will show `EXCLAMATION`
         return AssetsPath.warning;
       case ContentType.help:
 
-        /// help will show `QUESTION MARK`
+      /// help will show `QUESTION MARK`
         return AssetsPath.help;
       default:
         return AssetsPath.failure;
     }
   }
 
-  static ColorFilter? _getColorFilter(
-          ui.Color? color, ui.BlendMode colorBlendMode) =>
+  static ColorFilter? _getColorFilter(ui.Color? color,
+      ui.BlendMode colorBlendMode) =>
       color == null ? null : ui.ColorFilter.mode(color, colorBlendMode);
 }
